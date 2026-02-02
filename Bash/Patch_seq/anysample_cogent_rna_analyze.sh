@@ -9,6 +9,17 @@
 
 module load R/4.4.0      
 
+
+cogent rna demux \
+  -f path \
+  -p path \
+  -t smartseq_fla_umi \
+  -o path \
+  -b path \
+  --fastqc
+
+
+
 echo "Starting CogentAP analysis"
 mkdir -p "path"
 
@@ -20,3 +31,8 @@ cogent rna analyze \
     -t smartseq_fla_umi
 
 echo "Finished"
+
+
+
+
+
