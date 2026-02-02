@@ -8,6 +8,10 @@
 
 echo "JOB STARTED on $(hostname) at $(date)"
 
+# Run pySCENIC GRN step inside Singularity.
+# Replace `path` placeholders with your Singularity image + data directories.
+# Ensure `--num_workers` matches allocated cores.
+#
 # Path to Singularity image
 SIF=/path/Singularity/aertslab-pyscenic-scanpy-0.12.1-1.9.1.sif
 

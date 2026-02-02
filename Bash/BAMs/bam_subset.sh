@@ -5,6 +5,10 @@
 #$ -l h_rt=24:00:00
 #$ -P selneuro
 
+# Subset Cell Ranger BAMs by barcode list and re-index.
+# - Replace `path` placeholders with real directories/files.
+# - Requires subset-bam + samtools on PATH.
+# - Uses SGE-provided $NSLOTS for thread count.
 INPUT_BAM_DIR="path"
 BARCODES_FILE="path"
 OUTPUT_BAM_DIR="path"

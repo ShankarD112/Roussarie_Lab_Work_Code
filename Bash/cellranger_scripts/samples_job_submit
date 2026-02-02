@@ -1,3 +1,7 @@
+#!/bin/bash
+# Generate and submit one Cell Ranger count job per sample (SGE).
+# Replace placeholder paths and sample IDs before running.
+
 # Directories
 FASTQ_DIR="path"   # Where your FASTQs are stored
 OUT_DIR="path"     # Output directory for Cell Ranger

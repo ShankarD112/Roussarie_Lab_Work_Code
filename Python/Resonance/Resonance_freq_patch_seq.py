@@ -7,7 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/12XDV6qDjwQATj8B8xLkQxHynNnxaXwhB
 """
 
-pip install mne
+# NOTE: This file is exported from a notebook. Install requirements in your
+# environment before running (e.g., `pip install mne`).
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,6 +28,9 @@ from mne.time_frequency import psd_array_multitaper
 #for file in only_files:
   #  print(file)
 
+# -----------------------------
+# Core helpers: load + plotting
+# -----------------------------
 def load_mat_trace_data(file_path):
     mat_data = scipy.io.loadmat(file_path)
 
@@ -72,6 +76,9 @@ def plot_current_over_time(time, current, title='Current over Time'):
     plt.tight_layout()
     plt.show()
 
+# -----------------------------
+# Resonance + impedance helpers
+# -----------------------------
 def compute_impedance_and_resonance(time, voltage, current,
                                     full_fmin=0.5, full_fmax=20.0,
                                     res_fmin=0, res_fmax=20):
@@ -145,7 +152,12 @@ def plot_impedance_profile(freqs, impedance, resonant_freq,
     plt.tight_layout()
     plt.show()
 
-Jul262024IR3a_time_v, Jul262024IR3a_voltage, Jul262024IR3a_current = load_mat_trace_data("/content/drive/MyDrive/Colab_Notebooks/Data/40/Jul292024IR3g.mat")
+# -----------------------------
+# Example: single file workflow
+# -----------------------------
+Jul262024IR3a_time_v, Jul262024IR3a_voltage, Jul262024IR3a_current = load_mat_trace_data(
+    "/content/drive/MyDrive/Colab_Notebooks/Data/40/Jul292024IR3g.mat"
+)
 
 plot_voltage_over_time(Jul262024IR3a_time_v, Jul262024IR3a_voltage)
 plot_current_over_time(Jul262024IR3a_time_v, Jul262024IR3a_current)
@@ -170,6 +182,9 @@ plot_impedance_profile(freqs, Z_profile, f_res)
 
 
 
+# -----------------------------
+# Batch processing + plot export
+# -----------------------------
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -288,12 +303,16 @@ def process_all_mat_files(input_directory, output_directory):
             print(f"Error processing file {mat_file}: {e}")
 
 # Parameters
+# Replace with your directories.
 input_directory = "/content/drive/MyDrive/Colab_Notebooks/Data/resonance/40"
 output_directory = "/content/drive/MyDrive/Colab_Notebooks/Data/Results/resonance/40/plots/"
 
 # Run the script
 process_all_mat_files(input_directory, output_directory)
 
+# -----------------------------
+# Batch processing + metrics export
+# -----------------------------
 import os
 import numpy as np
 import pandas as pd
@@ -456,6 +475,7 @@ def process_and_save_to_excel(input_directory, output_file):
 
 
 # Parameters
+# Replace with your directories.
 input_directory = "/content/drive/MyDrive/Colab_Notebooks/Data/resonance/40"
 output_file = "/content/drive/MyDrive/Colab_Notebooks/Data/Results/resonance/40/summary_mt_fft.xlsx"
 
@@ -464,10 +484,9 @@ process_and_save_to_excel(input_directory, output_file)
 
 
 
-#pip install fcwt
-
-!apt-get update
-!apt-get install -y libfftw3-dev libfftw3-single3
+# NOTE: For fcwt experiments, install dependencies in your environment:
+# pip install fcwt
+# apt-get update && apt-get install -y libfftw3-dev libfftw3-single3
 
 import fcwt
 import numpy as np
@@ -482,6 +501,7 @@ import fcwt
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Re-defined here for the CWT section (kept as-is from the notebook).
 def load_mat_trace_data(file_path):
     mat_data = scipy.io.loadmat(file_path)
     # grab all non-“__” keys
@@ -541,8 +561,6 @@ sig = np.asarray(voltage, dtype=np.float32)
 freqs_v, coefs_v = fcwt.cwt(sig, st, fs, f0, f1, n_freqs)
 
 fcwt.plot(sig, st, fs, f0, f1, n_freqs)
-
-
 
 
 

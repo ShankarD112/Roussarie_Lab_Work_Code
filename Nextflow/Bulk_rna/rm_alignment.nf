@@ -1,4 +1,5 @@
 #!/usr/bin/env nextflow
+// Bulk RNA-seq pipeline template (alignment + counts). Customize paths/params.
 nextflow.enable.dsl=2
 
 //

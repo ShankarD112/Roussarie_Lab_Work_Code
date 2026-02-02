@@ -1,3 +1,8 @@
+#!/bin/bash
+# Merge per-sample Cell Ranger BAMs into one BAM.
+# - Replace `path` placeholders and sample IDs.
+# - Set `threads` to match available cores.
+
 # Output directory and merged BAM file
 outdir="path"
 outfile="${outdir}/merged_possorted.bam"
@@ -9,6 +14,8 @@ samples=(
 )
 
 bam_list=$(mktemp)
+
+threads=8
 
 for s in "${samples[@]}"; do
     echo "path/${s}/outs/possorted_genome_bam.bam" >> "$bam_list"

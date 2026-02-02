@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""scVI/scANVI integration template for Patch-seq + snSM datasets."""
 
 import scvi
 import scanpy as sc
@@ -11,6 +12,7 @@ print("scvi-tools version:", scvi.__version__)
 
 
 
+# Replace with your AnnData inputs.
 patch_seq = sc.read_h5ad("path")
 snsm = sc.read_h5ad("path")
 
@@ -56,6 +58,7 @@ scvi.model.SCVI.setup_anndata(
 )
 
 
+# Train scANVI for semi-supervised integration.
 scanvi = scvi.model.SCANVI(adata)
 scanvi.train()
 
@@ -96,9 +99,9 @@ if "cell_id" in adata.obs.columns:
 
 
 
+# Save the integrated AnnData.
 adata.write("path")
 print("Integrated scANVI AnnData saved.")
-
 
 
 

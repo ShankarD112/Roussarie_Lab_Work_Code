@@ -8,6 +8,10 @@
 
 echo "JOB STARTED on $(hostname) at $(date)"
 
+# Run pySCENIC CTX step in Singularity (motif enrichment).
+# Replace `path` placeholders with your working directory and motif databases.
+# Ensure `--num_workers` matches allocated cores.
+
 SIF=/path/Singularity/aertslab-pyscenic-scanpy-0.12.1-1.9.1.sif
 WORKDIR=/path/
 

@@ -7,7 +7,10 @@
 #$ -l h_rt=24:00:00
 #$ -P selneuro
 
-module load R/4.4.0      
+module load R/4.4.0
+
+# CogentAP demux + analyze pipeline for Patch-seq.
+# Replace all `path` placeholders with run-specific directories.
 
 
 cogent rna demux \
@@ -31,7 +34,6 @@ cogent rna analyze \
     -t smartseq_fla_umi
 
 echo "Finished"
-
 
 
 

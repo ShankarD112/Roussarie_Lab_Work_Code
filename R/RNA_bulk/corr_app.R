@@ -8,6 +8,10 @@ library(readr)
 
 options(shiny.maxRequestSize = 1000 * 1024^2)
 
+# Shiny app for exploring gene ↔ proteoform correlations.
+# Expected input columns include:
+#   - Gene, Proteoform, Pvalue, FDR_BH, Correlation, CorrelationMethod
+
 
 # UI
 ui <- fluidPage(

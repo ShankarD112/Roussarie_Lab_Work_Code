@@ -1,3 +1,5 @@
+"""Scrublet workflow: generate per-sample counts + doublet calls."""
+
 import scanpy as sc
 sc.__version__
 
@@ -5,6 +7,8 @@ import scrublet as scr
 scr
 
 import importlib.metadata as md
+import pandas as pd
+import scipy.sparse as sp
 
 print(md.version("scrublet"))
 
@@ -14,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+# Replace with your Cell Ranger output base directory.
 base_dir = "path"
 
 samples = [
@@ -22,6 +27,7 @@ samples = [
     "sample9", "sample10", "sample11", "sample12", "sample13"
 ]
 
+# Where to write per-sample and merged outputs.
 out_dir = "path"
 os.makedirs(out_dir, exist_ok=True)
 
@@ -58,6 +64,7 @@ print("Merged:", adata_all.shape, "->", merged_out)
 
 
 
+# Where to read per-sample counts + write scrublet outputs.
 in_dir = "path"
 out_dir_scrub = "path"
 os.makedirs(out_dir_scrub, exist_ok=True)
@@ -92,6 +99,7 @@ for s in samples:
 
 
 
+# Where to collect scrublet outputs for summary.
 in_dir_scrub = "path"
 
 dfs = []
@@ -121,7 +129,6 @@ summary
 out_csv = "path"
 all_df.to_csv(out_csv, index=False)
 out_csv
-
 
 
 

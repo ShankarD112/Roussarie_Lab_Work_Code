@@ -1,4 +1,5 @@
 #!/usr/bin/env nextflow
+// Bulk RNA-seq pipeline: FastQC → STAR → sort/index → featureCounts.
 nextflow.enable.dsl=2
 
 //
