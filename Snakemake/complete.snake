@@ -1,0 +1,131 @@
+rule all:
+    input:
+        expand("path/Trimmed/project/project_{sample}_{rep}_trimmed.fastq.gz",
+               sample=["sample1", "sample2", "sample3", "sample4", "sample5", "sample6", "sample7", "sample8"],
+               rep=["R1", "R2"]),
+        expand("path/Align/project/project_{sample}.Aligned.out.bam",
+               sample=["sample1", "sample2", "sample3", "sample4", "sample5", "sample6", "sample7", "sample8"]),
+
+
+rule trim_reads:
+    input:
+        r1="path/data/project/project_{sample}_R1.fastq.gz",
+        r2="path/data/project/project_{sample}_R2.fastq.gz"
+    output:
+        trimmed1="path/Trimmed/project/project_{sample}_R1_trimmed.fastq.gz",
+        trimmed2="path/Trimmed/project/project_{sample}_R2_trimmed.fastq.gz"
+    conda:
+        "path/envs/cutadapt.yml"
+    shell:
+        """
+        cutadapt -u 5 -U 5 \
+        -a 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG' --discard-trimmed \
+        -A 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG' --discard-trimmed \
+        -o {output.trimmed1} -p {output.trimmed2} {input.r1} {input.r2}
+        """
+
+rule fastqc:
+    input:
+        fastq="path/Trimmed/project/project_{sample}_{rep}_trimmed.fastq.gz"
+    output:
+        html="path/fastqc/project/project_{sample}_{rep}_trimmed_fastqc.html",
+    conda:
+        "path/envs/fastqc_env.yml"
+    shell:
+        """
+        fastqc {input.fastq} --outdir path/fastqc/project
+        """
+
+rule star:
+    input:
+        r1="path/Trimmed/project/project_{sample}_R1_trimmed.fastq.gz",
+        r2="path/Trimmed/project/project_{sample}_R2_trimmed.fastq.gz",
+        star_dir="path/index/"
+    output:
+        bam="path/Align/project/project_{sample}.Aligned.out.bam"
+    params:
+        prefix="path/Align/project/project_{sample}."
+    threads: 16
+    conda:
+        "path/envs/star_env.yml"
+    shell:
+        """
+        STAR --genomeDir {input.star_dir} --readFilesIn {input.r1} {input.r2} --readFilesCommand zcat --outSAMtype BAM Unsorted --outFileNamePrefix {params.prefix} --runThreadN {threads}
+        """
+
+rule samtools_flagstat:
+    input:
+        bam="path/Align/project/project_{sample}.Aligned.out.bam"
+    output:
+        flagstats="path/samtools_flagstats/project/project_{sample}_flagstats.txt"
+    threads: 8
+    conda:
+        "path/envs/samtools_env.yml"
+    shell:
+        """
+        samtools flagstat {input.bam} > {output.flagstats}
+        """
+
+rule multiqc:
+    input:
+        flagstat_dir=expand("path/samtools_flagstats/project/project_{sample}_flagstats.txt",
+                            sample=["sample1", "sample2", "sample3", "sample4", "sample5", "sample6", "sample7", "sample8", "sample9"],
+                            rep=["R1", "R2"])
+    output:
+        report="path/verse/project/multiqc_report.html"
+    params:
+        outdir="path/verse/project/"
+    conda:
+        "path/envs/multiqc_env.yml"
+    shell:
+        """
+        multiqc {input.flagstat_dir} -o {params.outdir} -f
+        """
+
+rule verse:
+    input:
+        bam="path/Align/project/project_{sample}.Aligned.out.bam",
+        gtf="path/refs/annotation.gtf"
+    output:
+        verse_exons="path/verse/project/project_{sample}.exon.txt"
+    params:
+        prefix="path/verse/project/project_{sample}"
+    threads: 8
+    conda:
+        "path/envs/verse_env.yml"
+    shell:
+        """
+        verse -S -a {input.gtf} -o {params.prefix} {input.bam}
+        """
+
+rule concat_verse:
+    input:
+        mats=expand("path/verse/project/project_{sample}.exon.txt",
+                    sample=["sample1", "sample2", "sample3", "sample4", "sample5", "sample6", "sample7", "sample8", "sample9"],
+                    rep=["R1", "R2"])
+    output:
+        concat="path/verse/project/verse_concat_project.csv"
+    shell:
+        """
+        python concat_df.py -i {input.mats} -o {output.concat}
+        """
+
+rule filter_cts:
+    input:
+        verse="path/verse/project/verse_concat_project.csv"
+    output:
+        filtered="path/verse/project/verse_concat_project_filtered.csv"
+    shell:
+        """
+        python filter_cts_mat.py -i {input.verse} -o {output.filtered}
+        """
+
+rule txn_mapping:
+    input:
+        gtf="path/refs/annotation.gtf"
+    output:
+        mapping="path/refs/id2gene.txt"
+    shell:
+        """
+        python parse_gtf.py -i {input.gtf} -o {output.mapping}
+        """
