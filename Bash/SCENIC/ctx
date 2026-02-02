@@ -1,0 +1,34 @@
+#!/bin/bash
+#$ -o sample.out
+#$ -j y
+#$ -pe omp 16
+#$ -l h_rt=48:00:00
+#$ -P selneuro
+#$ -N output
+
+echo "JOB STARTED on $(hostname) at $(date)"
+
+SIF=/path/Singularity/aertslab-pyscenic-scanpy-0.12.1-1.9.1.sif
+WORKDIR=/path/
+
+cd "$WORKDIR"
+
+singularity exec \
+  --bind /path \
+  --bind "$PWD":"$PWD" \
+  "$SIF" \
+  pyscenic ctx \
+    RSS_results/sample_adj.csv \
+    feather_cistarget/mm9-500bp-upstream-7species.mc9nr.genes_vs_motifs.rankings.feather \
+    feather_cistarget/mm9-500bp-upstream-10species.mc9nr.genes_vs_motifs.rankings.feather \
+    feather_cistarget/mm9-tss-centered-5kb-7species.mc9nr.genes_vs_motifs.rankings.feather \
+    feather_cistarget/mm9-tss-centered-5kb-10species.mc9nr.genes_vs_motifs.rankings.feather \
+    feather_cistarget/mm9-tss-centered-10kb-7species.mc9nr.genes_vs_motifs.rankings.feather \
+    feather_cistarget/mm9-tss-centered-10kb-10species.mc9nr.genes_vs_motifs.rankings.feather \
+    --annotations_fname feather_cistarget/motifs-v9-nr.mgi-m0.001-o0.0.tbl \
+    --expression_mtx_fname RSS_results/sample_scenic_input.loom \
+    --output RSS_results/sample_reg.csv \
+    --mask_dropouts \
+    --num_workers 16
+
+echo "JOB FINISHED at $(date)"
