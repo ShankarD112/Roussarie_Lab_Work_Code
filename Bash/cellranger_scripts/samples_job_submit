@@ -1,0 +1,45 @@
+# Directories
+FASTQ_DIR="path"   # Where your FASTQs are stored
+OUT_DIR="path"     # Output directory for Cell Ranger
+REF_DIR="path"     # Reference genome for Cell Ranger
+
+PROJECT_NAME="selneuro"
+
+# List of sample directories inside FASTQ_DIR
+SAMPLES=(
+  "sample1" "sample2" "sample3" "sample4" 
+)
+
+module load bcl2fastq
+module load cellranger
+
+# Loop over each sample
+for SAMPLE in "${SAMPLES[@]}"; do
+
+    SAMPLE_FASTQ_DIR="$FASTQ_DIR/$SAMPLE"
+    
+    # Create a job script for each sample
+    JOB_SCRIPT="${SAMPLE}_cellranger_count.sh"
+    echo "#!/bin/bash" > $JOB_SCRIPT
+    echo "#$ -cwd" >> $JOB_SCRIPT
+    echo "#$ -N ${SAMPLE}_count" >> $JOB_SCRIPT
+    echo "#$ -o ${SAMPLE}_count.out" >> $JOB_SCRIPT
+    echo "#$ -e ${SAMPLE}_count.err" >> $JOB_SCRIPT
+    echo "#$ -pe omp 24" >> $JOB_SCRIPT
+    echo "#$ -l mem_per_core=16G" >> $JOB_SCRIPT
+    echo "#$ -l h_rt=24:00:00" >> $JOB_SCRIPT
+    echo "#$ -P $PROJECT_NAME" >> $JOB_SCRIPT
+
+    echo "cd $OUT_DIR" >> $JOB_SCRIPT
+
+    # Command to run Cell Ranger 
+    echo "cellranger count --id=${SAMPLE} \\" >> $JOB_SCRIPT
+    echo "                --transcriptome=$REF_DIR \\" >> $JOB_SCRIPT
+    echo "                --create-bam=true \\" >> $JOB_SCRIPT
+    echo "                --fastqs=$SAMPLE_FASTQ_DIR \\" >> $JOB_SCRIPT
+    echo "                --sample=$SAMPLE \\" >> $JOB_SCRIPT
+    echo "                --localmem=128 \\" >> $JOB_SCRIPT  
+    echo "                --localcores=16" >> $JOB_SCRIPT  
+
+    qsub $JOB_SCRIPT 
+done
