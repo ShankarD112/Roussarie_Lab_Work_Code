@@ -6,6 +6,8 @@
 #$ -l h_rt=48:00:00
 #$ -P selneuro
 
+# Batch driver for RepeatMasker via the Dfam TE Tools container wrapper.
+# Replace `path` placeholders for working directory + library locations.
 cd path
 
 for dir in path/*; do

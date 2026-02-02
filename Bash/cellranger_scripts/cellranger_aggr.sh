@@ -1,4 +1,6 @@
 #!/bin/bash
+# Build a Cell Ranger aggregation CSV and run `cellranger aggr`.
+# Replace placeholder paths + sample IDs before submitting to the cluster.
 #$ -N Sample_aggr_exon              # job name
 #$ -o Sample_aggr_exon.out          # stdout log
 #$ -e Sample_aggr_exon.err          # stderr log

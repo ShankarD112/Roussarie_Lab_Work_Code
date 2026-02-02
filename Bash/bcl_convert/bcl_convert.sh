@@ -7,5 +7,11 @@
 
 module load bcl-convert
 
-
-bcl-convert   --bcl-input-directory /home/path/   --output-directory  /home/path/   --no-lane-splitting  true  --no-sample-sheet true --force
+# Convert Illumina BCLs to FASTQs.
+# Replace /home/path placeholders with your run folder + output folder.
+bcl-convert \
+  --bcl-input-directory /home/path/ \
+  --output-directory /home/path/ \
+  --no-lane-splitting true \
+  --no-sample-sheet true \
+  --force

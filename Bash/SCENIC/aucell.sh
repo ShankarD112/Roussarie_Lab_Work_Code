@@ -8,6 +8,9 @@
 
 echo "JOB STARTED on $(hostname) at $(date)"
 
+# Run pySCENIC AUCell scoring in Singularity.
+# Replace `path` placeholders with your working directory and loom outputs.
+
 SIF=/path/Singularity/aertslab-pyscenic-scanpy-0.12.1-1.9.1.sif
 WORKDIR=/path/
 

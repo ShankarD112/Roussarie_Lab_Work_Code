@@ -1,3 +1,6 @@
+# Full RNA-seq Snakemake workflow template.
+# Replace `path` placeholders and sample lists with your own.
+
 rule all:
     input:
         expand("path/Trimmed/project/project_{sample}_{rep}_trimmed.fastq.gz",

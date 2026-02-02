@@ -1,3 +1,7 @@
+#!/bin/bash
+# Pool hashed FASTQs into a single directory with consistent naming.
+# Replace the `path` placeholders for RAW_DIR/LINK_DIR/SHEET.
+
 #----- variables you already have --------------------------------------------
 RAW_DIR="path"
 LINK_DIR="path"

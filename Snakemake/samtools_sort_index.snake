@@ -1,3 +1,6 @@
+# Sort + index BAMs using samtools (template).
+# Replace `path` placeholders and sample lists with your own.
+
 rule all:
     input:
         expand("path/sort_index/project/project_{sample}_sorted.bam",

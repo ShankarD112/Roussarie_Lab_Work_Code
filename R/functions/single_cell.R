@@ -1,5 +1,5 @@
-
-# Usage use source("/path/single_cell.R") in you script
+# Reusable single-cell helper functions (Seurat + friends).
+# Usage: source("/path/single_cell.R") in your script.
 
 
 # Load necessary library

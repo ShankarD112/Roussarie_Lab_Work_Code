@@ -1,3 +1,6 @@
+# DESeq2 bulk RNA-seq analysis template.
+# Replace placeholder paths and update group labels as needed.
+
 # loading in the required packages
 (library(DESeq2))
 (library(tidyverse))
@@ -8,7 +11,7 @@ library(stats)
 library(dplyr)
 
 
-# Loading in files.
+# Loading in files (replace `path` placeholders).
 counts <- as.matrix(read.csv("path", row.name = "gene"))
 id2gene <- read_delim("path", col_names = c("geneids", "genenames"))
 
@@ -26,10 +29,9 @@ coldata
 
 
 
-# Example gene
-plotCounts(dds, gene = "GENE_ID_1", intgroup = "Treatment")
-# Example gene
-plotCounts(dds, gene = "GENE_ID_2", intgroup = "Treatment")
+# Example gene plots (requires `dds` to be created below).
+# plotCounts(dds, gene = "GENE_ID_1", intgroup = "Treatment")
+# plotCounts(dds, gene = "GENE_ID_2", intgroup = "Treatment")
 dds <- DESeqDataSetFromMatrix(countData = counts, colData = coldata, design = ~Treatment)
 dds <- DESeq(dds)
 res <- results(dds, contrast = c("Treatment", "GroupA", "GroupB"))
@@ -151,7 +153,6 @@ top_neg_nes <- gsea_res %>%
 
 print(top_pos_nes)
 print(top_neg_nes)
-
 
 
 
