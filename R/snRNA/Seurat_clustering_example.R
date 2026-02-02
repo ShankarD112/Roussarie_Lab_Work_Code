@@ -1,9 +1,4 @@
-#!/usr/bin/env Rscript
 
-# GitHub-ready Seurat merge + QC + SCTransform workflow
-# - Replaced HPC paths with "path"
-# - Replaced sample IDs with generic sample1..sample13
-# - Kept logic the same, cleaned formatting
 
 suppressPackageStartupMessages({
   library(Seurat)
