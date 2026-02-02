@@ -1,11 +1,4 @@
-#!/usr/bin/env Rscript
 
-# Patch-seq WGCNA workflow (cleaned, GitHub-ready)
-# - Removed Rmd chunk markers
-# - Replaced HPC paths with "path"
-# - Kept analysis flow intact
-# - NOTE: This script assumes Seurat/tidyverse/readxl/etc. are installed
-# - Edit the PATHS section before running
 
 suppressPackageStartupMessages({
   library(dplyr)
